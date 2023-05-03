@@ -1,118 +1,89 @@
 package centroInnovacionUN;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import serpapi.GoogleSearch;
-
+import java.util.*;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class InvestigacionController {
-	 private Investigacion model;
+    
+    private static final String BASE_URL = "https://serpapi.com/search.json";
+    private static final String API_KEY = "c04ce9dd4864fc08aaf346a36b3853d2b2a1d9ceddf3570457147408a4d8523f";
+    
+    public List<Investigacion> buscarInvestigaciones(List<String> autores) {
+        List<Investigacion> resultados = new ArrayList<>();
+        
+        for (String autor : autores) {
+            Map<String, String> parametros = new HashMap<>();
+            parametros.put("engine", "google_scholar_author");
+            parametros.put("author_id", autor);
+            parametros.put("api_key", API_KEY);
+            
+            try {
+                String url = construirUrl(BASE_URL, parametros);
+                //System.out.println("URL de búsqueda: " + url);
+                JsonObject resultado = obtenerJson(url);
+                JsonObject author = resultado.getAsJsonObject("author");
+                JsonArray items = author.getAsJsonArray("interests");
 
-	    public InvestigacionController() {
-	        model = new Investigacion();
-	    }
-	    
-	    public List<Investigacion> buscarInvestigaciones(String query) {
-	        Map<String, String> parameter = new HashMap<>();
-	        parameter.put("engine", "google_scholar");
-	        parameter.put("q", query.replace(" ", "%20"));
-	        parameter.put("api_key", "c04ce9dd4864fc08aaf346a36b3853d2b2a1d9ceddf3570457147408a4d8523f");
-	        parameter.put("num", "10");
-	        
-	        String url = "https://serpapi.com/search.json?";
-	        for (Map.Entry<String, String> entry : parameter.entrySet()) {
-	            String key = entry.getKey();
-	            String value = entry.getValue();
-	            url += key + "=" + value + "&";
-	        }
-	        
-	        HttpClient client = HttpClient.newHttpClient();
-	        HttpRequest request = HttpRequest.newBuilder()
-	                .uri(URI.create(url))
-	                .GET()
-	                .build();
-	        GoogleSearch search = new GoogleSearch(parameter);
-	        
-	        
+                System.out.println("Esto es author: "+author);
+                
+                Investigacion investigacion = new Investigacion();
+                investigacion.setNombre(author.get("name").getAsString());
+                investigacion.setAfiliación(author.get("affiliations").getAsString());
+                investigacion.setEmail(author.get("email").getAsString());
+                System.out.println("Estos son los items: "+items);
+           
+                for (int i = 0; i < items.size(); i++) {
+                
+                	JsonObject item = items.get(i).getAsJsonObject();
+                    
+                   investigacion.setPublicacion(item.get("title").getAsString());
+                   investigacion.setLink(item.get("link").getAsString());
+                 
+               
+                    resultados.add(investigacion);
+                }
+                
+            } catch (Exception e) {
+            	  
+                System.out.println("Ocurrió un error al procesar la consulta: " + e.getMessage());
+            }
+        }
+        
+        return resultados;
+    }
+    
+    private String construirUrl(String baseUrl, Map<String, String> parametros) throws UnsupportedEncodingException {
+        StringJoiner sj = new StringJoiner("&");
+        
+        for (Map.Entry<String, String> entry : parametros.entrySet()) {
+            String clave = entry.getKey();
+            String valor = entry.getValue();
+            sj.add(clave + "=" + URLEncoder.encode(valor, "UTF-8"));
+        }
+        
+        return baseUrl + "?" + sj.toString();
+    }
+    
+    private JsonObject obtenerJson(String url) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+        
+        HttpClient client = HttpClient.newHttpClient();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        
+        return com.google.gson.JsonParser.parseString(response.body()).getAsJsonObject();
 
-	        try {
-	        	HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-	            JsonObject results = JsonParser.parseString(response.body()).getAsJsonObject();
-	            var organicResults = results.getAsJsonArray("organic_results");
-
-	            List<Investigacion> investigaciones = new ArrayList<>();
-
-	            for (int i = 0; i < organicResults.size(); i++) {
-	                JsonObject result = organicResults.get(i).getAsJsonObject();
-
-	                String titulo = result.get("title").getAsString();
-	                
-	                JsonElement element = result.get("result_id");
-	                String resultadoID = null;
-	                if (element != null && !element.isJsonNull()) {
-	                    resultadoID = element.getAsString();
-	                }
-
-	                List<Investigacion.Autor> autores = new ArrayList<>();
-	                JsonArray authorsArray = result.getAsJsonArray("authors");
-	                if (authorsArray != null && authorsArray.size() > 0) {
-	                    for (int j = 0; j < authorsArray.size(); j++) {
-	                        JsonObject authorObject = authorsArray.get(j).getAsJsonObject();
-	                        String name = authorObject.get("name").getAsString();
-	                        String link = authorObject.get("link").getAsString();
-	                        Investigacion.Autor autor = new Investigacion.Autor();
-	                        autor.setNombre(name);
-	                        autor.setEnlace(link);
-	                        autores.add(autor);
-	                    }
-	                }
-
-	                JsonElement publicationElement = result.get("publication");
-	                String publicacion = null;
-	                if (publicationElement != null && !publicationElement.isJsonNull()) {
-	                    publicacion = publicationElement.getAsString();
-	                }
-
-	                JsonElement fechaElement = result.get("publication_date");
-	                String fecha = null;
-	                if (fechaElement != null && !fechaElement.isJsonNull()) {
-	                    fecha = fechaElement.getAsString();
-	                }
-
-	                String resumen = result.get("snippet").getAsString();
-
-	                Investigacion investigacion = new Investigacion();
-	                investigacion.setTitulo(titulo);
-	                investigacion.getAutores().addAll(autores);
-	                investigacion.setPublicacion(publicacion);
-	                investigacion.setFecha(fecha);
-	                investigacion.setResumen(resumen);
-	                investigacion.setResultadoID(resultadoID);
-
-	                investigaciones.add(investigacion);
-	            }
-
-	            return investigaciones;
-
-	        } catch (Exception e) {
-	            System.err.println("Ocurrió un error: " + e.getMessage());
-	            e.printStackTrace();
-	            return null;
-	        }
-	        
-	        
-	    }
-	    
+    }
 }

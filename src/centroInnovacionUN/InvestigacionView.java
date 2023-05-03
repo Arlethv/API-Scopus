@@ -1,47 +1,33 @@
 package centroInnovacionUN;
 
 import java.util.List;
-
+import java.util.Arrays;
 
 public class InvestigacionView {
-	private InvestigacionController controller;
-	
-	public InvestigacionView() {
-	    controller = new InvestigacionController();
-	}
+    private InvestigacionController controller;
 
-	public void mostrarInvestigaciones(String query) {
-		 List<Investigacion> investigaciones = controller.buscarInvestigaciones(query);
+    public InvestigacionView() {
+        controller = new InvestigacionController();
+    }
 
-		    if (investigaciones != null && !investigaciones.isEmpty()) {
-		        System.out.println("Investigaciones encontradas:");
-		        for (Investigacion investigacion : investigaciones) {
-		            System.out.println("Resultado ID" + investigacion.getResultadoID());
-		            System.out.println("Título: " + investigacion.getTitulo());
-		            System.out.print("Autores: ");
-		            for (Investigacion.Autor autor : investigacion.getAutores()) {
-		                System.out.print(autor.getNombre() + " ");
-		            }
-		            System.out.println();
-		            System.out.println("Publicación: " + investigacion.getPublicacion());
-		            System.out.println("Fecha: " + investigacion.getFecha());
-		            System.out.println("Resumen: " + investigacion.getResumen());
-		            System.out.println();
-		        }
-		    } else {
-		        System.out.println("No se encontraron investigaciones.");
-		    }
-	}
-
-	public static void main(String[] args) {
-	    InvestigacionView view = new InvestigacionView();
-
-	    String consulta = "Avances Académicos Universidad del Norte México";
-
-	    view.mostrarInvestigaciones(consulta);
-
-	  
-	}
+    public void mostrarResultados(List<Investigacion> resultados) {
+        System.out.println("Resultados de la búsqueda:\n");
+        System.out.println("Número de resultados: " + resultados.size()); // Imprime el tamaño de la lista de resultados
 
 
+        for (Investigacion investigacion : resultados) {
+            System.out.println("Título: " + investigacion.getPublicacion());
+            System.out.println("Autores: " + investigacion.getNombre());
+            System.out.println("Fecha: " + investigacion.getEmail());
+            System.out.println("Fuente: " + investigacion.getFuente());
+            System.out.println("URL: " + investigacion.getLink() + "\n");
+        }
+    }
+
+    public static void main(String[] args) {
+        InvestigacionView vista = new InvestigacionView();
+        List<String> autores = Arrays.asList("3zcL9O8AAAAJ", "vySsVoQAAAAJ");
+        List<Investigacion> resultados = vista.controller.buscarInvestigaciones(autores);
+        vista.mostrarResultados(resultados);
+    }
 }
