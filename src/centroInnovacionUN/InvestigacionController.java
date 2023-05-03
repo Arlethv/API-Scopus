@@ -35,13 +35,12 @@ public class InvestigacionController {
                 JsonObject author = resultado.getAsJsonObject("author");
                 JsonArray items = author.getAsJsonArray("interests");
 
-                System.out.println("Esto es author: "+author);
-                
+           
                 Investigacion investigacion = new Investigacion();
                 investigacion.setNombre(author.get("name").getAsString());
                 investigacion.setAfiliación(author.get("affiliations").getAsString());
                 investigacion.setEmail(author.get("email").getAsString());
-                System.out.println("Estos son los items: "+items);
+                //System.out.println("Estos son los items: "+items);
            
                 for (int i = 0; i < items.size(); i++) {
                 

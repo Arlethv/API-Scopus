@@ -1,7 +1,11 @@
 package centroInnovacionUN;
 
 import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
 public class Investigacion {
     private String nombre;
     private String afiliación;
@@ -12,6 +16,26 @@ public class Investigacion {
     private String fuente;
     private String link;
     
+    public class ConexionBD {
+    	private static final String driver = "com.mysql.jdbc.Driver";
+    	private static final String url = "jdbc:mysql://localhost:3306/centro_innovacion_un";
+    	private static final String usuario = "root";
+
+        public static Connection getConnection() throws SQLException {
+            Connection conexion = null;
+            try {
+                Class.forName(driver);
+                conexion = DriverManager.getConnection(url,usuario,"");
+            } catch (ClassNotFoundException e) {
+                throw new SQLException("No se pudo cargar el driver JDBC", e);
+            } catch (SQLException e) {
+                throw new SQLException("No se pudo establecer la conexión a la base de datos", e);
+            }
+            return conexion;
+        }
+        
+    }
+
 	public String getNombre() {
 		return nombre;
 	}

@@ -12,15 +12,13 @@ public class InvestigacionView {
 
     public void mostrarResultados(List<Investigacion> resultados) {
         System.out.println("Resultados de la búsqueda:\n");
-        System.out.println("Número de resultados: " + resultados.size()); // Imprime el tamaño de la lista de resultados
-
 
         for (Investigacion investigacion : resultados) {
             System.out.println("Título: " + investigacion.getPublicacion());
             System.out.println("Autores: " + investigacion.getNombre());
             System.out.println("Fecha: " + investigacion.getEmail());
             System.out.println("Fuente: " + investigacion.getFuente());
-            System.out.println("URL: " + investigacion.getLink() + "\n");
+            System.out.println("Link: " + investigacion.getLink() + "\n");
         }
     }
 
