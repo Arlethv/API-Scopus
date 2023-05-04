@@ -2,6 +2,9 @@ package centroInnovacionUN;
 
 import java.util.List;
 import java.util.Arrays;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class InvestigacionView {
@@ -36,11 +39,13 @@ public class InvestigacionView {
  
     }
 
+
     public static void main(String[] args) {
         InvestigacionView vista = new InvestigacionView();
         List<String> autores = Arrays.asList("3zcL9O8AAAAJ", "vySsVoQAAAAJ","MvqhthMAAAAJ", "VBd6xSMAAAAJ", "vXkJXeYAAAAJ",
         		"7bCiMVYAAAAJ","GbDRjAQAAAAJ","SE1yAnAAAAAJ","3zcL9O8AAAAJ", "phtwX-wAAAAJ");
         List<Investigacion> resultados = vista.controller.buscarInvestigaciones(autores);
         vista.mostrarResultados(resultados);
+        
     }
 }

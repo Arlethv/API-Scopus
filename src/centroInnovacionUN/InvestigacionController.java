@@ -20,10 +20,11 @@ import com.google.gson.JsonObject;
 public class InvestigacionController {
     
     private static final String BASE_URL = "https://serpapi.com/search.json";
-    private static final String API_KEY = "c04ce9dd4864fc08aaf346a36b3853d2b2a1d9ceddf3570457147408a4d8523f";
+    private static final String API_KEY = "88e11cd7749ee225f7e9f48f5b4a2c5435def63ee89fece3a6ede9d1b071a623";
     
     public List<Investigacion> buscarInvestigaciones(List<String> autores) {
         List<Investigacion> resultados = new ArrayList<>();
+        InvestigacionDAO dao = new InvestigacionDAO();
         
         for (String autor : autores) {
             Map<String, String> parametros = new HashMap<>();
@@ -45,6 +46,8 @@ public class InvestigacionController {
                 investigacion.setAfiliación(author.get("affiliations").getAsString());
                 investigacion.setEmail(author.get("email").getAsString());
                 investigacion.setID(id.get("author_id").getAsString());
+                
+                
                
              
                 ArrayList<Investigacion.Tema> temas = new ArrayList<Investigacion.Tema>();
@@ -63,6 +66,7 @@ public class InvestigacionController {
                 }
                
                 investigacion.setTema(temas);
+                dao.agregarAutor(investigacion);
                 resultados.add(investigacion);
             } catch (Exception e) {
             	  
@@ -96,4 +100,5 @@ public class InvestigacionController {
         return com.google.gson.JsonParser.parseString(response.body()).getAsJsonObject();
 
     }
+    
 }

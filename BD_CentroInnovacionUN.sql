@@ -26,7 +26,7 @@ CREATE TABLE ARTICULO (
     autores VARCHAR(255),
     publicacion VARCHAR(255),
     citado_por VARCHAR(255),
-    año DATE NOT NULL,
+    año INT NOT NULL,
     FOREIGN KEY (autorID) REFERENCES AUTOR(autorID)
 );
 

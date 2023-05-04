@@ -22,15 +22,20 @@ public class Investigacion {
     }
     
     public class ConexionBD {
-    	private static final String driver = "com.mysql.jdbc.Driver";
+    	private static final String driver = "com.mysql.cj.jdbc.Driver";
+
     	private static final String url = "jdbc:mysql://localhost:3306/centro_innovacion_un";
     	private static final String usuario = "root";
+    	private static final String password="MySQL123";
 
         public static Connection getConnection() throws SQLException {
             Connection conexion = null;
             try {
                 Class.forName(driver);
-                conexion = DriverManager.getConnection(url,usuario,"");
+                conexion = DriverManager.getConnection(url,usuario,password);
+               //onexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/centro_innovacion_un?user=root&password=");
+
+                
             } catch (ClassNotFoundException e) {
                 throw new SQLException("No se pudo cargar el driver JDBC", e);
             } catch (SQLException e) {
