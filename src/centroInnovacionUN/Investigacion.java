@@ -33,8 +33,7 @@ public class Investigacion {
             try {
                 Class.forName(driver);
                 conexion = DriverManager.getConnection(url,usuario,password);
-               //onexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/centro_innovacion_un?user=root&password=");
-
+               
                 
             } catch (ClassNotFoundException e) {
                 throw new SQLException("No se pudo cargar el driver JDBC", e);

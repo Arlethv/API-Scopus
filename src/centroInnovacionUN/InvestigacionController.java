@@ -67,6 +67,7 @@ public class InvestigacionController {
                
                 investigacion.setTema(temas);
                 dao.agregarAutor(investigacion);
+                dao.agregarTema(investigacion);
                 resultados.add(investigacion);
             } catch (Exception e) {
             	  

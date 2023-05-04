@@ -3,6 +3,7 @@ package centroInnovacionUN;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class InvestigacionDAO {
 	
@@ -17,10 +18,38 @@ public class InvestigacionDAO {
             ps.setString(3, investigacion.getAfiliación());
             ps.setString(4, investigacion.getEmail());
             ps.executeUpdate();
-            System.out.println("se agrego:"+ query); 
-            System.out.println("Se agregó el artículo: " + investigacion.getNombre() + " a la base de datos.");
+            
         } catch (SQLException e) {
             throw new SQLException("Error al agregar el autor a la base de datos", e);
+        } finally {
+            if (conexion != null) {
+                conexion.close();
+            }
+        }
+    }
+
+    
+
+
+ // Método para agregar un tema a la base de datos
+    public void agregarTema(Investigacion investigacion) throws SQLException {
+        String query = "INSERT INTO TEMA (autorID, titulo, link) VALUES (?, ?, ?)";
+        Connection conexion = Investigacion.ConexionBD.getConnection();
+        try {
+            PreparedStatement ps = conexion.prepareStatement(query);
+
+            ArrayList<Investigacion.Tema> temas = investigacion.getTema();
+            ps.setString(1,investigacion.getID());
+            for (Investigacion.Tema tema : temas) {
+                ps.setString(2, tema.getTitle());
+                ps.setString(3, tema.getLink());
+                ps.executeUpdate();
+            }
+            
+            System.out.println("Este es el metodo agregar Datos:" +investigacion.getID());
+
+        } catch (SQLException e) {
+            throw new SQLException("Error al agregar el tema a la base de datos", e);
         } finally {
             if (conexion != null) {
                 conexion.close();
