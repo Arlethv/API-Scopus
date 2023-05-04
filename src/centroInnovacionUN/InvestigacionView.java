@@ -2,6 +2,7 @@ package centroInnovacionUN;
 
 import java.util.List;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 public class InvestigacionView {
     private InvestigacionController controller;
@@ -14,17 +15,31 @@ public class InvestigacionView {
         System.out.println("Resultados de la búsqueda:\n");
 
         for (Investigacion investigacion : resultados) {
-            System.out.println("Título: " + investigacion.getPublicacion());
-            System.out.println("Autores: " + investigacion.getNombre());
-            System.out.println("Fecha: " + investigacion.getEmail());
-            System.out.println("Fuente: " + investigacion.getFuente());
-            System.out.println("Link: " + investigacion.getLink() + "\n");
+            System.out.println("ID Autor: " + investigacion.getID());
+            System.out.println("Autor: " + investigacion.getNombre());
+            System.out.println("Email: " + investigacion.getEmail());
+            System.out.println("Afiliacion: " + investigacion.getAfiliación() + "\n");
+            
+            
+            ArrayList<Investigacion.Tema> temas = investigacion.getTema();
+            
+     
+          
+            for (Investigacion.Tema tema : temas) {
+                System.out.println("Título del tema: " + tema.getTitle());
+                System.out.println("Enlace del tema: " + tema.getLink()+ "\n");
+            
+            }
+
         }
+        
+ 
     }
 
     public static void main(String[] args) {
         InvestigacionView vista = new InvestigacionView();
-        List<String> autores = Arrays.asList("3zcL9O8AAAAJ", "vySsVoQAAAAJ");
+        List<String> autores = Arrays.asList("3zcL9O8AAAAJ", "vySsVoQAAAAJ","MvqhthMAAAAJ", "VBd6xSMAAAAJ", "vXkJXeYAAAAJ",
+        		"7bCiMVYAAAAJ","GbDRjAQAAAAJ","SE1yAnAAAAAJ","3zcL9O8AAAAJ", "phtwX-wAAAAJ");
         List<Investigacion> resultados = vista.controller.buscarInvestigaciones(autores);
         vista.mostrarResultados(resultados);
     }

@@ -7,14 +7,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Investigacion {
+	private String ID;
     private String nombre;
     private String afiliación;
     private String email;
     private String publicacion;
     private String fecha;
     private String resumen;
-    private String fuente;
     private String link;
+    private ArrayList<Tema> tema;
+    
+    public Investigacion() {
+        tema = new ArrayList<Tema>();
+    }
     
     public class ConexionBD {
     	private static final String driver = "com.mysql.jdbc.Driver";
@@ -35,6 +40,42 @@ public class Investigacion {
         }
         
     }
+    
+
+    public class Tema{
+        private String title;
+        private String link;
+
+
+        // Constructor
+        public Tema(String title, String link) {
+            this.title = title;
+            this.link = link;
+        }
+
+        // Getters y setters
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getLink() {
+            return link;
+        }
+
+        public void setLink(String link) {
+            this.link = link;
+        }
+
+      
+
+        
+    }
+
+    //Getter y Setters
 
 	public String getNombre() {
 		return nombre;
@@ -72,17 +113,24 @@ public class Investigacion {
 	public void setResumen(String resumen) {
 		this.resumen = resumen;
 	}
-	public String getFuente() {
-		return fuente;
-	}
-	public void setFuente(String fuente) {
-		this.fuente = fuente;
-	}
+	
 	public String getLink() {
 		return link;
 	}
 	public void setLink(String link) {
 		this.link = link;
+	}
+	public ArrayList<Tema> getTema() {
+		return tema;
+	}
+	public void setTema(ArrayList<Tema> tema) {
+		this.tema = tema;
+	}
+	public String getID() {
+		return ID;
+	}
+	public void setID(String iD) {
+		ID = iD;
 	}
 
 

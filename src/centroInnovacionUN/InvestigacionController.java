@@ -10,6 +10,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
 import com.google.gson.JsonParser;
+
+import centroInnovacionUN.Investigacion.Tema;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -30,29 +33,37 @@ public class InvestigacionController {
             
             try {
                 String url = construirUrl(BASE_URL, parametros);
-                //System.out.println("URL de búsqueda: " + url);
+               
                 JsonObject resultado = obtenerJson(url);
                 JsonObject author = resultado.getAsJsonObject("author");
                 JsonArray items = author.getAsJsonArray("interests");
+                JsonObject id = resultado.getAsJsonObject("search_parameters");
 
            
                 Investigacion investigacion = new Investigacion();
                 investigacion.setNombre(author.get("name").getAsString());
                 investigacion.setAfiliación(author.get("affiliations").getAsString());
                 investigacion.setEmail(author.get("email").getAsString());
-                //System.out.println("Estos son los items: "+items);
+                investigacion.setID(id.get("author_id").getAsString());
+               
+             
+                ArrayList<Investigacion.Tema> temas = new ArrayList<Investigacion.Tema>();
+
            
                 for (int i = 0; i < items.size(); i++) {
                 
                 	JsonObject item = items.get(i).getAsJsonObject();
-                    
-                   investigacion.setPublicacion(item.get("title").getAsString());
-                   investigacion.setLink(item.get("link").getAsString());
                  
-               
-                    resultados.add(investigacion);
+                	String title = item.get("title").getAsString();
+                    String link = item.get("link").getAsString();
+                    Investigacion.Tema nuevoTema = investigacion.new Tema(title, link);
+                    temas.add(nuevoTema);
+                   
+                    
                 }
-                
+               
+                investigacion.setTema(temas);
+                resultados.add(investigacion);
             } catch (Exception e) {
             	  
                 System.out.println("Ocurrió un error al procesar la consulta: " + e.getMessage());
