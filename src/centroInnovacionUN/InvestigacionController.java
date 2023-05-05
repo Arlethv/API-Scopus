@@ -20,7 +20,7 @@ import com.google.gson.JsonObject;
 public class InvestigacionController {
     
     private static final String BASE_URL = "https://serpapi.com/search.json";
-    private static final String API_KEY = "88e11cd7749ee225f7e9f48f5b4a2c5435def63ee89fece3a6ede9d1b071a623";
+    private static final String API_KEY = "434edda3b7d8ac68dcbaf8f72706daaaec9f169096f612c617c732a07ea75af4";
     
     public List<Investigacion> buscarInvestigaciones(List<String> autores) {
         List<Investigacion> resultados = new ArrayList<>();
@@ -37,9 +37,11 @@ public class InvestigacionController {
                
                 JsonObject resultado = obtenerJson(url);
                 JsonObject author = resultado.getAsJsonObject("author");
+                JsonArray articulosUN = resultado.getAsJsonArray("articles");
                 JsonArray items = author.getAsJsonArray("interests");
-                JsonObject id = resultado.getAsJsonObject("search_parameters");
 
+                JsonObject id = resultado.getAsJsonObject("search_parameters");
+               
            
                 Investigacion investigacion = new Investigacion();
                 investigacion.setNombre(author.get("name").getAsString());
@@ -48,7 +50,6 @@ public class InvestigacionController {
                 investigacion.setID(id.get("author_id").getAsString());
                 
                 
-               
              
                 ArrayList<Investigacion.Tema> temas = new ArrayList<Investigacion.Tema>();
 
@@ -65,12 +66,35 @@ public class InvestigacionController {
                     
                 }
                
+                ArrayList<Investigacion.Articulo> articulos = new ArrayList<Investigacion.Articulo>();
+
+                for (int i = 0; i < articulosUN.size(); i++) {
+                    JsonObject articulo = articulosUN.get(i).getAsJsonObject();
+                    String tituloArticulo = articulo.has("title") ? articulo.get("title").getAsString() : "";
+                    String linkArticulo = articulo.has("link") ? articulo.get("link").getAsString() : "";
+                    String cita_id = articulo.has("citation_id") ? articulo.get("citation_id").getAsString() : "";
+                    String autoresArticulo = articulo.has("authors") ? articulo.get("authors").getAsString() : "";
+                    String publicacionArticulo = articulo.has("publication") ? articulo.get("publication").getAsString() : "";
+                    int añoArticulo = articulo.has("year") ? articulo.get("year").getAsInt() : 0;
+
+                    Investigacion.Articulo nuevoArticulo = investigacion.new Articulo(tituloArticulo, linkArticulo, cita_id, autoresArticulo, publicacionArticulo, añoArticulo);
+                    articulos.add(nuevoArticulo);
+                }
+
+               
                 investigacion.setTema(temas);
+                investigacion.setArticulos(articulos);
+               
                 dao.agregarAutor(investigacion);
                 dao.agregarTema(investigacion);
+                dao.agregarArticulo(investigacion);
+                
                 resultados.add(investigacion);
+                
+               
             } catch (Exception e) {
             	  
+            	
                 System.out.println("Ocurrió un error al procesar la consulta: " + e.getMessage());
             }
         }

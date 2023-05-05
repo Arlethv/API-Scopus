@@ -20,6 +20,7 @@ public class InvestigacionDAO {
             ps.executeUpdate();
             
         } catch (SQLException e) {
+        	System.out.println("Error : " + e.getMessage());
             throw new SQLException("Error al agregar el autor a la base de datos", e);
         } finally {
             if (conexion != null) {
@@ -46,7 +47,7 @@ public class InvestigacionDAO {
                 ps.executeUpdate();
             }
             
-            System.out.println("Este es el metodo agregar Datos:" +investigacion.getID());
+            
 
         } catch (SQLException e) {
             throw new SQLException("Error al agregar el tema a la base de datos", e);
@@ -57,5 +58,33 @@ public class InvestigacionDAO {
         }
     }
 
+    // Método para agregar un articulo a la base de datos
+    public void agregarArticulo(Investigacion investigacion) throws SQLException {
+    	String query = "INSERT INTO ARTICULO(autorID, titulo, link, cita_id, autores, publicacion, año) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        Connection conexion = Investigacion.ConexionBD.getConnection();
+        try {
+            PreparedStatement ps = conexion.prepareStatement(query);
 
+            ArrayList<Investigacion.Articulo> articulos = investigacion.getArticulos();
+            ps.setString(1,investigacion.getID());
+            for (Investigacion.Articulo articulo : articulos) {
+                ps.setString(2, articulo.getTitulo());
+                ps.setString(3, articulo.getLink());
+                ps.setString(4, articulo.getCita_id());
+                ps.setString(5, articulo.getAutores());
+                ps.setString(6, articulo.getPublicacion());
+                ps.setInt(7, articulo.getAño());
+               
+                ps.executeUpdate();
+            }
+          
+        } catch (SQLException e) {
+        	System.out.println("Error : " + e.getMessage());
+            throw new SQLException("Error al agregar el articulo a la base de datos", e);
+        } finally {
+            if (conexion != null) {
+                conexion.close();
+            }
+        }
+    } 
 }

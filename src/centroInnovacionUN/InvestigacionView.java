@@ -11,11 +11,19 @@ public class InvestigacionView {
     private InvestigacionController controller;
 
     public InvestigacionView() {
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
         controller = new InvestigacionController();
     }
 
     public void mostrarResultados(List<Investigacion> resultados) {
-        System.out.println("Resultados de la búsqueda:\n");
+    	/* System.out.println("Resultados de la búsqueda:\n");
 
         for (Investigacion investigacion : resultados) {
             System.out.println("ID Autor: " + investigacion.getID());
@@ -28,14 +36,14 @@ public class InvestigacionView {
             
      
           
-            for (Investigacion.Tema tema : temas) {
-                System.out.println("Título del tema: " + tema.getTitle());
-                System.out.println("Enlace del tema: " + tema.getLink()+ "\n");
+            //for (Investigacion.Tema tema : temas) {
+                //System.out.println("Título del tema: " + tema.getTitle());
+                //System.out.println("Enlace del tema: " + tema.getLink()+ "\n");
             
-            }
+           // }
 
         }
-        
+        */
  
     }
 
@@ -43,7 +51,7 @@ public class InvestigacionView {
     public static void main(String[] args) {
         InvestigacionView vista = new InvestigacionView();
         List<String> autores = Arrays.asList("3zcL9O8AAAAJ", "vySsVoQAAAAJ","MvqhthMAAAAJ", "VBd6xSMAAAAJ", "vXkJXeYAAAAJ",
-        		"7bCiMVYAAAAJ","GbDRjAQAAAAJ","SE1yAnAAAAAJ","3zcL9O8AAAAJ", "phtwX-wAAAAJ");
+        		"SmpTWYwAAAAJ","GbDRjAQAAAAJ","SE1yAnAAAAAJ","k9QWwTcAAAAJ", "phtwX-wAAAAJ");
         List<Investigacion> resultados = vista.controller.buscarInvestigaciones(autores);
         vista.mostrarResultados(resultados);
         

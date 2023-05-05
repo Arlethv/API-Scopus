@@ -18,16 +18,16 @@ CREATE TABLE TEMA (
 );
 
 CREATE TABLE ARTICULO (
-    articuloID VARCHAR(255)  PRIMARY KEY,
+    articuloID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     autorID VARCHAR(255) NOT NULL,
     titulo VARCHAR(255) NOT NULL,
     link VARCHAR(255) NOT NULL,
     citacion_id VARCHAR(255),
     autores VARCHAR(255),
     publicacion VARCHAR(255),
-    citado_por VARCHAR(255),
-    año INT NOT NULL,
+    año INT ,
     FOREIGN KEY (autorID) REFERENCES AUTOR(autorID)
 );
+
 
 

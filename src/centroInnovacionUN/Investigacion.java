@@ -16,9 +16,11 @@ public class Investigacion {
     private String resumen;
     private String link;
     private ArrayList<Tema> tema;
+    private ArrayList<Articulo> articulos;
     
     public Investigacion() {
         tema = new ArrayList<Tema>();
+        articulos=new ArrayList<Articulo>();
     }
     
     public class ConexionBD {
@@ -78,8 +80,92 @@ public class Investigacion {
 
         
     }
+    
 
-    //Getter y Setters
+    public class Articulo{
+        private String titulo;
+        private String link;
+        private String cita_id;
+        private String autores;
+        private String publicacion;
+        private int  año;
+
+
+        // Constructor
+        public Articulo(String titulo, String link, String cita_id, String autores, String publicacion, int año) {
+            this.titulo=titulo;
+            this.link = link;
+            this.cita_id= cita_id;
+            this.autores=autores;
+            this.publicacion= publicacion;
+            this.año= año;
+        }
+
+ 
+		public String getTitulo() {
+			return titulo;
+		}
+
+
+		public void setTitulo(String titulo) {
+			this.titulo = titulo;
+		}
+
+
+		public String getLink() {
+			return link;
+		}
+
+
+		public void setLink(String link) {
+			this.link = link;
+		}
+
+
+		public String getCita_id() {
+			return cita_id;
+		}
+
+
+		public void setCita_id(String cita_id) {
+			this.cita_id = cita_id;
+		}
+
+
+		public String getAutores() {
+			return autores;
+		}
+
+
+		public void setAutores(String autores) {
+			this.autores = autores;
+		}
+
+
+		public String getPublicacion() {
+			return publicacion;
+		}
+
+
+		public void setPublicacion(String publicacion) {
+			this.publicacion = publicacion;
+		}
+
+
+		public int getAño() {
+			return año;
+		}
+
+
+		public void setAño(int año) {
+			this.año = año;
+		}
+
+      
+    }
+
+
+    //Getters y Setters de Autor
 
 	public String getNombre() {
 		return nombre;
@@ -135,6 +221,12 @@ public class Investigacion {
 	}
 	public void setID(String iD) {
 		ID = iD;
+	}
+	public ArrayList<Articulo> getArticulos() {
+		return articulos;
+	}
+	public void setArticulos(ArrayList<Articulo> articulos) {
+		this.articulos = articulos;
 	}
 
 
