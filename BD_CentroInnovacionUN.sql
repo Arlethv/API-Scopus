@@ -22,11 +22,19 @@ CREATE TABLE ARTICULO (
     autorID VARCHAR(255) NOT NULL,
     titulo VARCHAR(255) NOT NULL,
     link VARCHAR(255) NOT NULL,
-    citacion_id VARCHAR(255),
+    cita_id VARCHAR(255),
     autores VARCHAR(255),
     publicacion VARCHAR(255),
     año INT ,
     FOREIGN KEY (autorID) REFERENCES AUTOR(autorID)
+);
+
+CREATE TABLE AUTOR_TEMA (
+  autorID VARCHAR(255) NOT NULL,
+  temaID INT NOT NULL,
+  PRIMARY KEY (autorID, temaID),
+  FOREIGN KEY (autorID) REFERENCES AUTOR(autorID),
+  FOREIGN KEY (temaID) REFERENCES TEMA(temaID)
 );
 
 
